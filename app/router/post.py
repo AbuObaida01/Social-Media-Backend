@@ -18,13 +18,14 @@ async def get_posts(db:Session=Depends(get_db), limit: int=20, skip: int=0,
     # cursor.execute("""SELECT * from posts""")
     # my_posts = cursor.fetchall()
     # print(my_posts)
+
     # stmt=select(models.Post).limit(limit).offset(skip).where(models.Post.title.contains(search))  # .where(models.Post.owner_id==current_user.id) we can add this to get post only from my id
     # my_posts=db.execute(stmt).scalars().all()
 
-    results=select(models.Post, func.count(models.Votes.post_id).label("Votes")).outerjoin(
+    votes=select(models.Post, func.count(models.Votes.post_id).label("Votes")).outerjoin(
     models.Votes, models.Votes.post_id==models.Post.id).group_by(models.Post.id).limit(
     limit).offset(skip).where(models.Post.title.ilike(f"%{search}%"))
-    total= db.execute(results).all()
+    total= db.execute(votes).all()
     response=[]
     for post, votes in total:
         response.append({
