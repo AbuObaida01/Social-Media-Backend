@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from .. import models,schemas, utils
 from ..database import engine, SessionLocal, get_db
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from .. import oauth2
@@ -11,16 +11,33 @@ router=APIRouter(
 )
 
 @router.get("/",response_model=List[schemas.ResponsePost])
-async def get_posts(db:Session=Depends(get_db), current_user : int  =Depends(oauth2.get_current_user),limit: int=10, skip: int=0,
+
+async def get_posts(db:Session=Depends(get_db), limit: int=20, skip: int=0,
                     search: Optional[str]=""):
+    # current_user : int  =Depends(oauth2.get_current_user),(use this to authorize the user)  
     # cursor.execute("""SELECT * from posts""")
     # my_posts = cursor.fetchall()
     # print(my_posts)
-    stmt=select(models.Post).limit(limit).offset(skip).where(models.Post.title.contains(search))  # .where(models.Post.owner_id==current_user.id) we can add this to get post only from my id
-    my_posts=db.execute(stmt).scalars().all()
+    # stmt=select(models.Post).limit(limit).offset(skip).where(models.Post.title.contains(search))  # .where(models.Post.owner_id==current_user.id) we can add this to get post only from my id
+    # my_posts=db.execute(stmt).scalars().all()
 
+    results=select(models.Post, func.count(models.Votes.post_id).label("Votes")).outerjoin(
+    models.Votes, models.Votes.post_id==models.Post.id).group_by(models.Post.id).limit(
+    limit).offset(skip).where(models.Post.title.ilike(f"%{search}%"))
+    total= db.execute(results).all()
+    response=[]
+    for post, votes in total:
+        response.append({
+            "id": post.id,
+            "title":post.title,
+            "content":post.content,
+            "created_at": post.created_at,
+            "owner":post.owner,
+            "votes":votes
+        })
+    return response
     # my_posts = db.query(models.Post).all()
-    return my_posts
+    # return my_posts
 
 # To check that is it actually working in postGre
 # @router.get("/sqlalchemy")
@@ -29,7 +46,7 @@ async def get_posts(db:Session=Depends(get_db), current_user : int  =Depends(oau
 #     return{"data":posts}
 
 # TO create posts
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.ResponsePost)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponseCreate)
 def create_posts(post: schemas.PostCreate, db:Session=Depends(get_db), current_user : int  =Depends(oauth2.get_current_user)):
     # cursor.execute(f"INSERT INTO posts(title,content,published) VALUES ({post.title}, {post.content}, {post.published})")
     
