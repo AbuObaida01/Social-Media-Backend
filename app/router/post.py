@@ -92,15 +92,29 @@ async def get_post(id: int, db:Session=Depends(get_db), current_user :int=Depend
     #         return{"post_detail": post}
 
     # Using sqlalchemy
-    stmt = select(models.Post).where(models.Post.id == id)
-    post= db.execute(stmt).scalar_one_or_none()
+    # stmt = select(models.Post).where(models.Post.id == id)
+    # post= db.execute(stmt).scalar_one_or_none()
+
+    stmt=select(models.Post, func.count(models.Votes.post_id).label("Votes")).outerjoin(
+    models.Votes, models.Votes.post_id==models.Post.id).where(models.Post.id==id).group_by(models.Post.id)
+    result= db.execute(stmt).first()
+ 
     # post=db.query(models.Post).filter(models.Post.id== id).first()
 
 
-    if not post:
+    if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"id={id} not available")
-
-    return post
+    post, votes = result
+    return{
+        "id": post.id,
+        "title":post.title,
+        "content":post.content,
+        "created_at": post.created_at,
+        "owner":post.owner,
+        "votes":votes
+    }
+    # return response
+    # return post
 
 
     # # We can also use HTTP Exception
