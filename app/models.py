@@ -30,7 +30,7 @@ class User(Base):
     email: Mapped[str]=mapped_column(String,nullable=False, unique=True)
     password: Mapped[str]=mapped_column(String, nullable=False)
     created_at: Mapped[TIMESTAMP]=mapped_column(TIMESTAMP(timezone=True),nullable=False, server_default=text('now()'))
-    phone_no: Mapped[str]=mapped_column(String,nullable=False,unique=True)
+    # phone_no: Mapped[str]=mapped_column(String,nullable=False,unique=True)
 
 class Votes(Base):
     __tablename__='votes'
