@@ -11,17 +11,22 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-database_url = (
-    f"postgresql://{settings.database_username}:"
-    f"{quote_plus(settings.database_password)}@"
-    f"{settings.database_hostname}:"
-    f"{settings.database_port}/"
-    f"{settings.database_name}"
-)
+# database_url = (
+#     f"postgresql://{settings.database_username}:"
+#     f"{quote_plus(settings.database_password)}@"
+#     f"{settings.database_hostname}:"
+#     f"{settings.database_port}/"
+#     f"{settings.database_name}"
+# )
 
-# Escape % for alembic configparser
-database_url = database_url.replace("%", "%%")
-config.set_main_option("sqlalchemy.url",database_url)
+# # Escape % for alembic configparser
+# database_url = database_url.replace("%", "%%")
+# config.set_main_option("sqlalchemy.url",database_url)
+
+config.set_main_option(
+    "sqlalchemy.url",
+    settings.database_url
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
