@@ -7,11 +7,18 @@ import time
 from pydantic_settings import BaseSettings
 from .config import settings
 from urllib.parse import quote_plus
-# load_dotenv()
+from dotenv import load_dotenv
+import os
 
+# load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"))
+load_dotenv()
+
+# print("CWD:", os.getcwd())
+# print("ENV EXISTS:", os.path.exists(".env"))
+# print("FROM OS ENV:", os.getenv("DATABASE_URL"))
 # The format of connectiong with the DB
 
-# SQLALCHEMY_DATABASE_URL = 'postgresql://<username>:<password>@<ip-address/hostname>/<database_name>'
+# DATABASE_URL = 'postgresql://<username>:<password>@<ip-address/hostname>/<database_name>'
 
 
 
@@ -21,11 +28,15 @@ from urllib.parse import quote_plus
 # DB_PORT = os.getenv("DB_PORT")
 # DB_NAME = os.getenv("DB_NAME")
 
-SQLALCHEMY_DATABASE_URL = (
-    f"postgresql://{settings.database_username}:{quote_plus(settings.database_password)}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
-)
+# DATABASE_URL = (
+#     f"postgresql://{settings.database_username}:{quote_plus(settings.database_password)}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
+# )
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+DATABASE_URL=os.getenv("DATABASE_URL")
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL=DATABASE_URL.replace("postgres://","postgresql+psycopg2://",1)
+# print("DATABASE_URL:", DATABASE_URL)
+engine = create_engine(DATABASE_URL)
 
 class Base(DeclarativeBase):
     pass
