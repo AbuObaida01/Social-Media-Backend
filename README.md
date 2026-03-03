@@ -16,29 +16,49 @@ https://fastapi-learning-x6jm.onrender.com/docs
 ## Features
 
 • FastAPI modular project structure with routers
+
 • PostgreSQL database integration
+
 • SQLAlchemy ORM models
+
 • Pydantic request/response validation
+
 • User registration with hashed password storage
+
 • Secure login using OAuth2 password flow
+
 • JWT access token generation (HS256)
+
 • Token expiration handling
+
 • Protected routes using dependency injection
+
 • Authentication using Authorization Bearer tokens
+
 • Alembic database migrations
+
 • Production deployment on Render
 
 ## Tech Stack
 
 FastAPI
+
 PostgreSQL
+
 SQLAlchemy
+
 Alembic
+
 OAuth2 (Password Flow)
+
 JWT (HS256)
+
 python-jose
+
 passlib (bcrypt)
+
 pydantic-settings
+
 Uvicorn
 
 ## Authentication Flow
@@ -60,15 +80,25 @@ Protected routes verify the token and extract user information
 ## Project Structure
 
 app/
+
 ├── main.py
+
 ├── models.py
+
 ├── schemas.py
+
 ├── database.py
+
 ├── config.py
+
 ├── oauth2.py
+
 ├── routers/
+
 │ ├── auth.py
+
 │ ├── users.py
+
 │ └── posts.py
 
 alembic/
@@ -78,8 +108,11 @@ alembic/
 Create a .env file in the project root:
 
 DATABASE_URL=postgresql://user:password@host:port/database
+
 SECRET_KEY=your_secret_key
+
 ALGORITHM=HS256
+
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 The .env file is ignored and not committed to GitHub.
@@ -129,6 +162,7 @@ alembic upgrade head
 ## Current Status
 
 Authentication and authorization are fully implemented.
+
 The project structure supports extension with features such as relationships, voting systems, pagination, testing, and rate limiting.
 
 ## Notes
@@ -136,9 +170,15 @@ The project structure supports extension with features such as relationships, vo
 This project was built while studying backend development with FastAPI, with emphasis on:
 
 • Security best practices
+
 • Clean architecture
+
 • Proper environment management
+
 • Production deployment workflow
+
 • Database migration management
+
 • Proper Understanding of APIs
+
 • Role Based User Access
