@@ -1,85 +1,144 @@
 # FastAPI Authentication API
 
-This project is a backend API built while learning FastAPI.
-It focuses on authentication, authorization, and database-backed APIs.
+A production-ready backend API built using FastAPI, PostgreSQL, and JWT-based authentication.
+This project focuses on secure authentication, clean architecture, database migrations, and deployment.
 
-The project is implemented step by step while following a FastAPI course,
-with an emphasis on understanding how things work internally.
+The API is fully deployed and uses Alembic for database version control.
 
-## Features Implemented
+## Live API
 
-- FastAPI project structure with routers
-- PostgreSQL database integration
-- SQLAlchemy ORM models
-- Pydantic schemas for request/response validation
-- User registration
-- Password hashing and verification
-- OAuth2 password-based login
-- JWT access token generation (HS256)
-- Token expiration handling
-- Verifying logged-in users using JWT
-- Protecting routes using OAuth2 and JWT
+### Base URL:
+https://fastapi-learning-x6jm.onrender.com
+
+### Interactive API Docs (Swagger UI):
+https://fastapi-learning-x6jm.onrender.com/docs
+
+## Features
+
+• FastAPI modular project structure with routers
+• PostgreSQL database integration
+• SQLAlchemy ORM models
+• Pydantic request/response validation
+• User registration with hashed password storage
+• Secure login using OAuth2 password flow
+• JWT access token generation (HS256)
+• Token expiration handling
+• Protected routes using dependency injection
+• Authentication using Authorization Bearer tokens
+• Alembic database migrations
+• Production deployment on Render
 
 ## Tech Stack
 
-- FastAPI
-- PostgreSQL
-- SQLAlchemy
-- OAuth2 (Password Flow)
-- JWT (HS256)
-- python-jose
-- python-dotenv
+FastAPI
+PostgreSQL
+SQLAlchemy
+Alembic
+OAuth2 (Password Flow)
+JWT (HS256)
+python-jose
+passlib (bcrypt)
+pydantic-settings
+Uvicorn
 
 ## Authentication Flow
 
-1. User registers with email and password
-2. Password is hashed before storing in the database
-3. User logs in using OAuth2 password flow
-4. Server validates credentials
-5. Server generates a JWT containing user_id
-6. Client sends token in Authorization header
-7. Protected routes verify the token and extract user information
+User registers with email and password
+
+Password is hashed before storing in the database
+
+User logs in using OAuth2 password flow
+
+Server validates credentials
+
+Server generates a JWT containing user_id
+
+Client sends token in Authorization header
+
+Protected routes verify the token and extract user information
+
+## Project Structure
+
+app/
+├── main.py
+├── models.py
+├── schemas.py
+├── database.py
+├── config.py
+├── oauth2.py
+├── routers/
+│ ├── auth.py
+│ ├── users.py
+│ └── posts.py
+
+alembic/
 
 ## Environment Variables
 
-This project uses environment variables for sensitive configuration.
+Create a .env file in the project root:
 
-Create a `.env` file in the project root:
-
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=fastapi
-
+DATABASE_URL=postgresql://user:password@host:port/database
 SECRET_KEY=your_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
+The .env file is ignored and not committed to GitHub.
 
-⚠️ The `.env` file is ignored and not committed to GitHub.
+Running Locally
 
-## How to Run
+### Clone the repository
 
-1. Create and activate a virtual environment
-2. Install dependencies
-3. Set up PostgreSQL
-4. Add `.env` file
-5. Run the server
+Create and activate a virtual environment
 
-## uvicorn app.main:app --reload
+### Install dependencies
 
+pip install -r requirements.txt
+
+Configure your .env file
+
+Run database migrations
+
+alembic upgrade head
+
+### Start the server
+
+uvicorn app.main:app --reload
+
+### Production Deployment
+
+The application is deployed on Render.
+
+## Production start command:
+
+alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 10000
+
+Migrations run automatically during deployment.
+
+### Database Migrations
+
+This project uses Alembic for database version control.
+
+### Create a new migration:
+
+alembic revision --autogenerate -m "message"
+
+### Apply migrations:
+
+alembic upgrade head
 
 ## Current Status
 
-Authentication and authorization are implemented.
-The project will be extended with additional features
-such as relationships, voting, testing, and deployment.
+Authentication and authorization are fully implemented.
+The project structure supports extension with features such as relationships, voting systems, pagination, testing, and rate limiting.
 
 ## Notes
 
-This is a learning project.
-Code is written while studying FastAPI concepts and best practices.
+This project was built while studying backend development with FastAPI, with emphasis on:
 
-
-Built while learning backend development with FastAPI.
+• Security best practices
+• Clean architecture
+• Proper environment management
+• Production deployment workflow
+• Database migration management
+• Proper Understanding of APIs
+• Role Based User Access
