@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from . import schemas, models
 
-
+#something that goes over my mind
 oauth2_scheme=OAuth2PasswordBearer(tokenUrl='login')
 
 SECRET_KEY=settings.secret_key
