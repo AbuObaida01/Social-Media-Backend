@@ -26,7 +26,7 @@ app.include_router(post.router)
 app.include_router(auth.router)
 app.include_router(votes.router)
 
-# @app.get("/")
-# def root():
-#     return{"Hello":"Hello"}
+@app.get("/")
+def root():
+    return{"Hello":"bind done"}
 

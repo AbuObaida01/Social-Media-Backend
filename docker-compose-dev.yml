@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  api:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - 4000:8000
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abuObaida1998@.
+      POSTGRES_DB: fastapi
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+volumes:
+  postgres-db:
