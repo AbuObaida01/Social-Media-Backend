@@ -15,7 +15,7 @@ class Post(Base):
     # published=Column(Boolean, default=True)
 
     #new method of defining columns
-
+    #i do not know what am i doing
     id: Mapped[int]=mapped_column(Integer, primary_key=True, nullable=False)
     title: Mapped[str]=mapped_column(String, nullable=False)
     content: Mapped[str]=mapped_column(String, nullable=False)
